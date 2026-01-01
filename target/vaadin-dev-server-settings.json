@@ -1,0 +1,18 @@
+{
+  "frontendFolder": "D:/Bazy danych/flow-crm-tutorial-24/./src/main/frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "D:/Bazy danych/flow-crm-tutorial-24/./src/main/frontend/generated/jar-resources",
+  "staticOutput": "D:/Bazy danych/flow-crm-tutorial-24/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "statsOutput": "D:\\Bazy danych\\flow-crm-tutorial-24\\target\\classes\\META-INF\\VAADIN\\config",
+  "frontendBundleOutput": "D:\\Bazy danych\\flow-crm-tutorial-24\\target\\classes\\META-INF\\VAADIN\\webapp",
+  "devBundleOutput": "D:/Bazy danych/flow-crm-tutorial-24/target/dev-bundle/webapp",
+  "devBundleStatsOutput": "D:/Bazy danych/flow-crm-tutorial-24/target/dev-bundle/config",
+  "i18nOutput": "target/classes/vaadin-i18n",
+  "jarResourcesFolder": "D:/Bazy danych/flow-crm-tutorial-24/./src/main/frontend/generated/jar-resources",
+  "themeName": "flowcrmtutorial",
+  "clientServiceWorkerSource": "D:\\Bazy danych\\flow-crm-tutorial-24\\target\\sw.ts",
+  "pwaEnabled": true,
+  "offlineEnabled": true,
+  "offlinePath": "'offline.html'"
+}
