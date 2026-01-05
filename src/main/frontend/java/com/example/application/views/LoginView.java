@@ -70,12 +70,25 @@ public class LoginView extends VerticalLayout {
 	}
 
 	private void doLogin(String username, String password) {
+		if (username == null || username.isBlank()
+				|| password == null || password.isBlank()) {
+			Notification.show("Enter login and password");
+			return;
+		}
+
 		try {
 			Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 			SecurityContextHolder.getContext().setAuthentication(auth);
 			UI.getCurrent().navigate(""); // np. główny widok po zalogowaniu
-		} catch (AuthenticationException ex) {
-			Notification.show("Login failed: " + ex.getMessage());
+		} catch (BadCredentialsException e) {
+			Notification.show("Wrong password or login");
+			System.out.println("Wrong password or login" + e.getMessage());
+		} catch (AuthenticationException e) {
+			Notification.show("Login failed");
+			System.out.println("Login failed" + e.getMessage());
+		} catch (Exception e){
+			Notification.show("Something went wrong, please try again");
+			System.out.println("Something went wrong" + e.getMessage());
 		}
 	}
 }
