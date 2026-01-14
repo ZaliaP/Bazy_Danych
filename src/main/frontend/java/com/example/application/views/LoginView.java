@@ -9,18 +9,21 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.validation.constraints.Email;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @Route("login") 
-@PageTitle("Login | Vaadin CRM")
+@PageTitle("Login | Magazyn Harcerski")
 @AnonymousAllowed
 /*
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
@@ -59,25 +62,26 @@ public class LoginView extends VerticalLayout {
 	public LoginView(AuthenticationManager authManager) {
 		this.authManager = authManager;
 
-		TextField username = new TextField("Username");
+		//TextField username = new TextField("Username");
+		EmailField email = new EmailField("Email");
 		PasswordField password = new PasswordField("Password");
-		Button loginButton = new Button("Login", e -> doLogin(username.getValue(), password.getValue()));
+		Button loginButton = new Button("Login", e -> doLogin(email.getValue(), password.getValue()));
 
-		add(new H1("Vaadin CRM"), username, password, loginButton, new RouterLink("Register", RegistrationView.class));
+		add(new H1("Login"), email, password, loginButton, new RouterLink("Register", RegistrationView.class));
 		setAlignItems(Alignment.CENTER);
 		setJustifyContentMode(JustifyContentMode.CENTER);
 		setSizeFull();
 	}
 
-	private void doLogin(String username, String password) {
-		if (username == null || username.isBlank()
+	private void doLogin(String email, String password) {
+		if (email == null || email.isBlank()
 				|| password == null || password.isBlank()) {
 			Notification.show("Enter login and password");
 			return;
 		}
 
 		try {
-			Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+			Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 			SecurityContextHolder.getContext().setAuthentication(auth);
 			UI.getCurrent().navigate(""); // np. główny widok po zalogowaniu
 		} catch (BadCredentialsException e) {
