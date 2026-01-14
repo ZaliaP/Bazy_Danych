@@ -30,29 +30,49 @@ public class RegistrationView extends Composite{
     @Override
     protected Component initContent()  {
         TextField username = new TextField("Username");
-        //EmailField email = new EmailField("Email");
+        TextField lastName = new TextField("Last Name");
+        EmailField email = new EmailField("Email");
         PasswordField password = new PasswordField("Password");
         PasswordField confirmpassword = new PasswordField("Confirm Password");
 
 
 
-        return new VerticalLayout(
+        VerticalLayout layout = new VerticalLayout(
                 new H2("Register"),
                 username,
+                lastName,
+                email,
                 password,
                 confirmpassword,
                 new Button("Send", event -> register(
                         username.getValue(),
+                        lastName.getValue(),
+                        email.getValue(),
                         password.getValue(),
                         confirmpassword.getValue()
                         )),
                 new RouterLink("Login", LoginView.class)
         );
+
+        layout.setSizeFull(); // ⬅ zajmuje cały ekran
+        layout.setAlignItems(FlexComponent.Alignment.CENTER); // ⬅ poziomo
+        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER); //
+
+        return layout;
     }
 
-    private void register(String username, String password, String confirmPassword) {
+    private void register(String username, String lastname, String email, String password, String confirmPassword) {
         if(username.trim().isEmpty()) {
             Notification.show("Enter the username");
+        }
+        else if(lastname.trim().isEmpty()) {
+            Notification.show("Enter the last name");
+        }
+        else if(email.isEmpty()) {
+            Notification.show("Enter the email");
+        }
+        else if(!email.endsWith("@zhp.net.pl")) {
+            Notification.show("Enter the email with right domain");
         }
         else if(password.isEmpty()) {
             Notification.show("Enter the password");
@@ -60,8 +80,7 @@ public class RegistrationView extends Composite{
         else if(!password.equals(confirmPassword)) {
             Notification.show("Passwords do not match");
         }else{
-            Notification.show("Test");
-            authService.register(username, password);
+            authService.register(username, email, password);
             Notification.show("Registration successful");
         }
     }
