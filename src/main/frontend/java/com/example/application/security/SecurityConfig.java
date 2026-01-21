@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -31,19 +33,38 @@ public class SecurityConfig {
     public SecurityConfig(UserService userService) {
         this.userService = userService;
     }
+/*
+    @Bean
+    public SecurityFilterChain vaadinSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth -> auth
+                //.requestMatchers(HttpMethod.GET, "/images/*.png").permitAll()  // <3>
+                .requestMatchers("/login", "/registration", "/VAADIN/**").permitAll()
+                .requestMatchers("/magazyn").authenticated());
+        http.with(vaadin(), vaadin -> vaadin.loginView(LoginView.class)); // <4>
+        return http.build();
+    }*/
 
     @Bean
     public SecurityFilterChain vaadinSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth ->
-                auth.requestMatchers(HttpMethod.GET, "/images/*.png").permitAll());  // <3>
-        http.with(vaadin(), vaadin -> vaadin.loginView(LoginView.class)); // <4>
+
+        /*http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                        "/login",
+                        "/VAADIN/**",
+                        "/images/**",
+                        "/icons/**"
+                ).permitAll()
+                .anyRequest().permitAll()
+        );*/
+        http.with(vaadin(), vaadin ->
+                vaadin.loginView(LoginView.class)
+        );
+
         return http.build();
     }
 
-
     @Bean
     public UserDetailsService userDetailsService() {
-        // Teraz korzystamy z naszej bazy danych
         return userService;
     }
 
@@ -54,7 +75,6 @@ public class SecurityConfig {
         return bCryptPasswordEncoder;
     }
 
-    //gdyby coś usunąć
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService)
             throws Exception {
@@ -65,7 +85,7 @@ public class SecurityConfig {
                 .build();
     }
 
-     @Bean
+    @Bean
     public DaoAuthenticationProvider authenticationProvider(
             UserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder) {
