@@ -25,36 +25,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Route("login") 
 @PageTitle("Login | Magazyn Harcerski")
 @AnonymousAllowed
-/*
-public class LoginView extends VerticalLayout implements BeforeEnterObserver {
-
-	private final LoginForm login = new LoginForm();
-
-	public LoginView(){
-		addClassName("login-view");
-		setSizeFull();
-		setAlignItems(Alignment.CENTER);
-		setJustifyContentMode(JustifyContentMode.CENTER);
-
-		login.setAction("login");
-
-		add(new H1("Vaadin CRM"));
-		add(new Span("Username: user, Password: password"));
-		add(new Span("Username: admin, Password: password"));
-		add(login, new RouterLink("Register", RegistrationView.class));
-	}
-
-	@Override
-	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-		// inform the user about an authentication error
-		if(beforeEnterEvent.getLocation()
-				.getQueryParameters()
-				.getParameters()
-				.containsKey("error")) {
-			login.setError(true);
-		}
-	}
-}*/
 public class LoginView extends VerticalLayout {
 
 	private final AuthenticationManager authManager;
@@ -83,6 +53,13 @@ public class LoginView extends VerticalLayout {
 		try {
 			Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 			SecurityContextHolder.getContext().setAuthentication(auth);
+			//potrzebne do zatrzymania sesji zalogowanego użytkownika!!!!!!!!!!!!
+			//a dokładniej potrzebne ponieważ robię to ręcznie, jakby nie było ręcznie to by spring sam to ogranął :\
+			SecurityContextRepository repo = new HttpSessionSecurityContextRepository();
+			repo.saveContext(SecurityContextHolder.getContext(),
+					VaadinServletRequest.getCurrent().getHttpServletRequest(),
+					VaadinServletResponse.getCurrent().getHttpServletResponse());
+			//
 			UI.getCurrent().navigate(""); // np. główny widok po zalogowaniu
 		} catch (BadCredentialsException e) {
 			Notification.show("Wrong password or login");
