@@ -29,33 +29,33 @@ public class RegistrationView extends Composite{
 
     @Override
     protected Component initContent()  {
-        TextField username = new TextField("Username");
-        TextField lastName = new TextField("Last Name");
+        TextField username = new TextField("Imię");
+        TextField lastName = new TextField("Nazwisko");
         EmailField email = new EmailField("Email");
-        PasswordField password = new PasswordField("Password");
-        PasswordField confirmpassword = new PasswordField("Confirm Password");
+        PasswordField password = new PasswordField("Hasło");
+        PasswordField confirmpassword = new PasswordField("Potwierdź hasło");
 
 
 
         VerticalLayout layout = new VerticalLayout(
-                new H2("Register"),
+                new H2("Rejestracja"),
                 username,
                 lastName,
                 email,
                 password,
                 confirmpassword,
-                new Button("Send", event -> register(
+                new Button("Zajerestruj", event -> register(
                         username.getValue(),
                         lastName.getValue(),
                         email.getValue(),
                         password.getValue(),
                         confirmpassword.getValue()
                         )),
-                new RouterLink("Login", LoginView.class)
+                new RouterLink("Zaloguj się", LoginView.class)
         );
 
-        layout.setSizeFull(); // ⬅ zajmuje cały ekran
-        layout.setAlignItems(FlexComponent.Alignment.CENTER); // ⬅ poziomo
+        layout.setSizeFull(); // zajmuje cały ekran
+        layout.setAlignItems(FlexComponent.Alignment.CENTER); // poziomo
         layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER); //
 
         return layout;
@@ -63,25 +63,25 @@ public class RegistrationView extends Composite{
 
     private void register(String username, String lastname, String email, String password, String confirmPassword) {
         if(username.trim().isEmpty()) {
-            Notification.show("Enter the username");
+            Notification.show("Wpisz imię");
         }
         else if(lastname.trim().isEmpty()) {
-            Notification.show("Enter the last name");
+            Notification.show("Wpisz nazwisko");
         }
         else if(email.isEmpty()) {
-            Notification.show("Enter the email");
+            Notification.show("Wpisz email");
         }
         else if(!email.endsWith("@zhp.net.pl")) {
-            Notification.show("Enter the email with right domain");
+            Notification.show("Email musi się kończyć odpowiednią domeną");
         }
         else if(password.isEmpty()) {
-            Notification.show("Enter the password");
+            Notification.show("Wpisz hasło");
         }
         else if(!password.equals(confirmPassword)) {
-            Notification.show("Passwords do not match");
+            Notification.show("Potwierdź hasło");
         }else{
-            authService.register(username, email, password);
-            Notification.show("Registration successful");
+            authService.register(username, lastname, email, password);
+            Notification.show("Zajerestrowano pomyślnie");
         }
     }
 }

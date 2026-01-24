@@ -30,15 +30,28 @@ public class StartView extends VerticalLayout {
         this.auth = auth;
 
         //przyciski kwatermistsza
-        Button konta = new Button("Konta użytkowników");
+        Button konta = new Button("Konta użytkowników", e -> UI.getCurrent().navigate("Konta"));
         Button raporty = new Button("Raporty");
         Button sprzet = new Button("Uszkodzony sprzęt");
 
+        //przyciski drużynowego/przybocznego
+        //Button historia = new Button("Historia wniosków");
+
+        //wspólne przyciski
+        //Button skrzynka = new Button("Skrzynka odbiorcza");
+        //Button magazyn = new Button("Magazyn",
+                //e -> UI.getCurrent().navigate(Magazine.class));
+        //Button logout = new Button("Wyloguj", e -> securityService.logout());
+
         int buttonWidth = 250;
+        //skrzynka.setWidth(buttonWidth + "px");
+        //magazyn.setWidth(buttonWidth + "px");
         konta.setWidth(buttonWidth + "px");
         raporty.setWidth(buttonWidth + "px");
         sprzet.setWidth(buttonWidth + "px");
-        
+        //logout.setWidth(buttonWidth + "px");
+        //historia.setWidth(buttonWidth + "px");
+
         VerticalLayout kwatermistsz = new VerticalLayout(
                 skrzynkaButton(), magazynButton(), konta, raporty, sprzet, logoutButton()
         );
@@ -71,6 +84,8 @@ public class StartView extends VerticalLayout {
                 .set("max-width", "300px")
                 .set("width", "100%")
                 .set("background-color", "var(--lumo-base-color)");
+
+        //RouterLink linkMagazyn = new RouterLink("Test magazyn", Magazine.class);
 
         if(auth.hasRole("ADMIN")) {
             add(new H1("Czuwaj Kwatermistrz!"), kwatermistsz);

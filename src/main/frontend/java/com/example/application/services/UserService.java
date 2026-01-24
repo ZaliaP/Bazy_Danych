@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -31,5 +33,26 @@ public class UserService implements UserDetailsService {
                 .password(user.getPassword())
                 .roles(user.getRole().name())
                 .build();
+    }
+
+    //znalezienie każdego użytkownika poza kwatermistrzem
+    public List<User> findAllNonAdmins() {
+        return userRepository.findByRoleNot(Role.ADMIN);
+    }
+
+    public List<User> findAllNonAdmins(String filter) {
+        if (filter == null || filter.isBlank()) {
+            return userRepository.findByRoleNot(Role.ADMIN);
+        }
+
+        return userRepository.searchUsers(Role.ADMIN, filter);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public void delete(User user) {
+        userRepository.delete(user);
     }
 }

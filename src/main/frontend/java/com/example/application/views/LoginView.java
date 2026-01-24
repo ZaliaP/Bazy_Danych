@@ -13,6 +13,8 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.server.VaadinServletResponse;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import jakarta.validation.constraints.Email;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,10 +23,42 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 @Route("login") 
 @PageTitle("Login | Magazyn Harcerski")
 @AnonymousAllowed
+/*
+public class LoginView extends VerticalLayout implements BeforeEnterObserver {
+
+	private final LoginForm login = new LoginForm();
+
+	public LoginView(){
+		addClassName("login-view");
+		setSizeFull();
+		setAlignItems(Alignment.CENTER);
+		setJustifyContentMode(JustifyContentMode.CENTER);
+
+		login.setAction("login");
+
+		add(new H1("Vaadin CRM"));
+		add(new Span("Username: user, Password: password"));
+		add(new Span("Username: admin, Password: password"));
+		add(login, new RouterLink("Register", RegistrationView.class));
+	}
+
+	@Override
+	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+		// inform the user about an authentication error
+		if(beforeEnterEvent.getLocation()
+				.getQueryParameters()
+				.getParameters()
+				.containsKey("error")) {
+			login.setError(true);
+		}
+	}
+}*/
 public class LoginView extends VerticalLayout {
 
 	private final AuthenticationManager authManager;
@@ -34,10 +68,10 @@ public class LoginView extends VerticalLayout {
 
 		//TextField username = new TextField("Username");
 		EmailField email = new EmailField("Email");
-		PasswordField password = new PasswordField("Password");
-		Button loginButton = new Button("Login", e -> doLogin(email.getValue(), password.getValue()));
+		PasswordField password = new PasswordField("Hasło");
+		Button loginButton = new Button("Zaloguj się", e -> doLogin(email.getValue(), password.getValue()));
 
-		add(new H1("Login"), email, password, loginButton, new RouterLink("Register", RegistrationView.class));
+		add(new H1("Logowanie"), email, password, loginButton, new RouterLink("Zajerestruj się", RegistrationView.class));
 		setAlignItems(Alignment.CENTER);
 		setJustifyContentMode(JustifyContentMode.CENTER);
 		setSizeFull();
@@ -46,7 +80,7 @@ public class LoginView extends VerticalLayout {
 	private void doLogin(String email, String password) {
 		if (email == null || email.isBlank()
 				|| password == null || password.isBlank()) {
-			Notification.show("Enter login and password");
+			Notification.show("Wpisz login i hasło");
 			return;
 		}
 
@@ -60,15 +94,15 @@ public class LoginView extends VerticalLayout {
 					VaadinServletRequest.getCurrent().getHttpServletRequest(),
 					VaadinServletResponse.getCurrent().getHttpServletResponse());
 			//
-			UI.getCurrent().navigate(""); // np. główny widok po zalogowaniu
+			UI.getCurrent().navigate("Start"); // np. główny widok po zalogowaniu
 		} catch (BadCredentialsException e) {
-			Notification.show("Wrong password or login");
+			Notification.show("Niepoprawne login lub hasło");
 			System.out.println("Wrong password or login" + e.getMessage());
 		} catch (AuthenticationException e) {
-			Notification.show("Login failed");
+			Notification.show("Logowanie nieudane");
 			System.out.println("Login failed" + e.getMessage());
 		} catch (Exception e){
-			Notification.show("Something went wrong, please try again");
+			Notification.show("Coś poszło nie tak, spróbuj ponownie");
 			System.out.println("Something went wrong" + e.getMessage());
 		}
 	}
