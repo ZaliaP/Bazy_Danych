@@ -26,8 +26,8 @@ public class AuthService {
     }
 
     @Transactional
-    public void register(String username, String lastname, String email, String password) {
-        User user = new User(username, lastname, email, password, Role.USER, passwordEncoder);
+    public void register(String number, String username, String lastname, String email, String password) {
+        User user = new User(number, username, lastname, email, password, Role.USER, passwordEncoder);
         //System.out.println("Encoded pass: " + user.getPassword());
         userRepository.save(user);
         //System.out.println("SAVED USER: " + user.getUsername());

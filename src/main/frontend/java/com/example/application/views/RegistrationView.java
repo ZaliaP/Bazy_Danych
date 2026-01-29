@@ -29,6 +29,7 @@ public class RegistrationView extends Composite{
 
     @Override
     protected Component initContent()  {
+        TextField number = new TextField("Numer ewidencji");
         TextField username = new TextField("Imię");
         TextField lastName = new TextField("Nazwisko");
         EmailField email = new EmailField("Email");
@@ -39,12 +40,14 @@ public class RegistrationView extends Composite{
 
         VerticalLayout layout = new VerticalLayout(
                 new H2("Rejestracja"),
+                number,
                 username,
                 lastName,
                 email,
                 password,
                 confirmpassword,
                 new Button("Zajerestruj", event -> register(
+                        number.getValue(),
                         username.getValue(),
                         lastName.getValue(),
                         email.getValue(),
@@ -61,8 +64,11 @@ public class RegistrationView extends Composite{
         return layout;
     }
 
-    private void register(String username, String lastname, String email, String password, String confirmPassword) {
-        if(username.trim().isEmpty()) {
+    private void register(String number, String username, String lastname, String email, String password, String confirmPassword) {
+        if(number.isEmpty()){
+            Notification.show("Wpisz numer ewidencji");
+        }
+        else if(username.trim().isEmpty()) {
             Notification.show("Wpisz imię");
         }
         else if(lastname.trim().isEmpty()) {
@@ -80,7 +86,7 @@ public class RegistrationView extends Composite{
         else if(!password.equals(confirmPassword)) {
             Notification.show("Potwierdź hasło");
         }else{
-            authService.register(username, lastname, email, password);
+            authService.register(number, username, lastname, email, password);
             Notification.show("Zajerestrowano pomyślnie");
         }
     }

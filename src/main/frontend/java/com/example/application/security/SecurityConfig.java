@@ -63,6 +63,8 @@ public class SecurityConfig {
         return http.build();
     }
 
+
+
     @Bean
     public UserDetailsService userDetailsService() {
         return userService;
@@ -75,6 +77,8 @@ public class SecurityConfig {
         return bCryptPasswordEncoder;
     }
 
+    //gdyby coś usunąć
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService)
             throws Exception {
@@ -84,6 +88,7 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(
@@ -95,4 +100,6 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
+
+
 }
